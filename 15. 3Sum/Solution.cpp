@@ -6,6 +6,7 @@ public:
             if(sum==0){
                 ans.push_back({nums[i],nums[start],nums[end]});
                 while(start<end && nums[start]==nums[++start]);
+                //while(start<end && nums[start]==nums[start+1])start++;
                 while(start<end && nums[end]==nums[--end]);
             }else if(sum<0)start++;
             else end--;
