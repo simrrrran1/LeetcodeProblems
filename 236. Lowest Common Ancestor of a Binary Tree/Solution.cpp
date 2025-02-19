@@ -15,10 +15,10 @@ public:
         TreeNode* leftRoot =  lowestCommonAncestor(root->left, p, q);
         TreeNode* rightRoot =  lowestCommonAncestor(root->right, p, q);
 
-        if(leftRoot && rightRoot) return root;
-        if(leftRoot)return leftRoot;
+        if(leftRoot && rightRoot) return root; //both p,q are in diff trees
+        if(leftRoot)return leftRoot; // p, q belong to same tree
         else return rightRoot;
-        return NULL;
+        return NULL; // p, q are not there in both left and right trees
 
     }
 };
