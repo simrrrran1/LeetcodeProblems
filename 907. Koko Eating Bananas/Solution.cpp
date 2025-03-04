@@ -3,7 +3,8 @@ public:
     long helper(int k, vector<int>&piles){
         long hours = 0;
         for(int i:piles){
-            hours += ((i+k-1)/k);
+            hours += (i/k);
+            if(i%k != 0) hours++;
         }
         return hours;
 
