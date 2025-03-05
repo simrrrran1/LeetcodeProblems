@@ -5,12 +5,14 @@ public:
         int left = 0, right = nums.size()-1;
 
         while(left <= right){
+            if(nums[left] < nums[right]){
+                ans = min(ans, nums[left]); break;
+            }
             int mid = left + (right-left)/2;
+            ans = min(ans, nums[mid]);   
             if(nums[mid] >= nums[left]){
-                ans = min(ans, nums[left]);
                 left = mid+1;
             }else{
-                ans = min(ans, nums[mid]);
                 right = mid-1;
             }
         }
