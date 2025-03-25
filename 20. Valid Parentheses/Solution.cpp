@@ -1,37 +1,38 @@
 class Solution {
 public:
     bool isValid(string s) {
-        int n=s.size();
-        if(n==0)return false;
-        stack<char>s1;
-        for(char c:s){
-            if(c=='('||c=='{'||c=='['){
-                s1.push(c);
+        stack<char> s1;
+        char c;
+        for(int i=0; i<s.size(); i++){
+            if(s[i] == '{' || s[i] == '(' || s[i] == '['){
+                s1.push(s[i]);
                 continue;
-            }else if(c=='}'||c==']'||c==')'){
-                if(s1.empty())return false;
-                switch(c){
-                    case ')':{
-                        char a=s1.top();
+            }
+            else if(s[i] == ')' || s[i] == '}' || s[i] == ']'){
+                if(s1.empty()) return false;
+                switch(s[i]){
+                    
+                    case '}':
+                        c = s1.top();
+                        if(c == '[' || c == '(') return false;
                         s1.pop();
-                        if(a=='{'||a=='[')return false;
                         break;
-                    }
-                    case '}':{
-                        char a=s1.top();
+
+                    case  ']':
+                        c = s1.top();
+                        if(c == '{' || c == '(') return false;
                         s1.pop();
-                        if(a=='('||a=='[')return false;
                         break;
-                    }
-                    case ']':{
-                        char a=s1.top();
+
+                    case ')':
+                        c = s1.top();
+                        if(c == '[' || c == '{') return false;
                         s1.pop();
-                        if(a=='('||a=='{')return false;
                         break;
-                    }
                 }
             }
         }
-        return s1.empty();  
+
+        return s1.empty();
     }
 };
