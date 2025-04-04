@@ -4,9 +4,9 @@ public:
         if(source == destination) return true;
         vis[source] = true;
 
-        for(auto& q: adj[source]){
-            if(!vis[q]){
-                if(helper(adj, vis, q, destination)){
+        for(auto& i: adj[source]){
+            if(!vis[i]){
+                if(helper(adj, vis, i, destination)){
                     return true;
                 }
             }
