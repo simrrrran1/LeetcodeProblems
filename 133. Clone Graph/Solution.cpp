@@ -22,10 +22,12 @@ public:
 class Solution {
 public:
     unordered_map<Node*, Node*> visited;
+
     Node* dfs(Node* node){
         if(visited[node]) return visited[node];
 
         Node* cloned_node = new Node(node->val);
+
         visited[node] = cloned_node;
 
         for(auto& i: node->neighbors){
@@ -35,9 +37,9 @@ public:
         return cloned_node;
 
     }
+
     Node* cloneGraph(Node* node) {
-        if(node == NULL) return NULL;
+        if(!node) return node;
         return dfs(node);
-        
     }
 };
