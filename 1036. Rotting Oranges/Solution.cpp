@@ -1,37 +1,45 @@
 class Solution {
 public:
     int orangesRotting(vector<vector<int>>& grid) {
-        int rows=grid.size();
-        int cols=grid[0].size();
-        int fresh=0;
-        queue<pair<int,int>>q;
-        for(int i=0;i<rows;i++){
-            for(int j=0;j<cols;j++){
-                if(grid[i][j]==1)fresh++;
-                if(grid[i][j]==2)q.push({i,j});
+        queue<pair<int,int>> q;
+        int fresh = 0;
+        int minutes = 0;
+
+        int row = grid.size();
+        int col = grid[0].size();
+
+        for(int i=0; i<row; i++){
+            for(int j=0; j<col; j++){
+                if(grid[i][j] == 1) fresh++;
+                if(grid[i][j] == 2) q.push({i,j});
             }
         }
-        int minutes=0;
-        int dx[]={-1,1,0,0};
-        int dy[]={0,0,-1,1};
+
+        vector<vector<int>> coordinates = {{0,-1}, {0,1}, {1,0}, {-1,0}};
+
         while(!q.empty() && fresh>0){
-            int k=q.size();
-            minutes++;
-            while(k--){
-                int row=q.front().first, col=q.front().second;
+            minutes += 1;
+            int k = q.size();
+
+            for(int i=0; i<k; i++){
+                pair<int,int> p = q.front();
                 q.pop();
-                for(int i=0;i<4;i++){
-                    int x=row+dx[i],y=col+dy[i];
-                    if(x>=0&&y>=0&&x<rows&&y<cols&&grid[x][y]==1){
-                        grid[x][y]=2;
-                        fresh--;
-                        q.push({x,y});
-                        if(fresh==0)return minutes;
+                for(int j=0; j<4; j++){
+                    int dx = p.first + coordinates[j][0];
+                    int dy = p.second + coordinates[j][1];
+
+                    if(dx>=0 && dy>=0 && dx<row && dy<col && grid[dx][dy]==1){
+                        grid[dx][dy] = 2;
+                        fresh -= 1;
+                        if(fresh == 0) return minutes;
+                        q.push({dx, dy});
                     }
                 }
             }
+
         }
-        if(fresh==0)return minutes;
-        return -1;
+
+        if(fresh > 0) return -1;
+        else return minutes;
     }
 };
