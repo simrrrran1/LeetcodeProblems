@@ -7,18 +7,41 @@ public:
         for(int i=0; i<nums.size(); i++){
             mp[nums[i]]++;
         }
-        priority_queue<pair<int,int>> pq;
+
+        vector<vector<int>> ans(nums.size()+1);
 
         for(auto i:mp){
-            pq.push({i.second, i.first});
+            int x = i.second;
+            ans[x].push_back(i.first);
         }
 
         vector<int> v;
-        for(int i=0; i<k; i++){
-            v.push_back(pq.top().second);
-            pq.pop();
+        for(int i=ans.size()-1; i>=0; i--){
+            while(ans[i].size()>0 && k>0){
+                v.push_back(ans[i].back());
+                ans[i].pop_back();
+                k--;
+            }
         }
 
         return v;
+
+
+        //vector<int> v;
+
+
+        
+        // priority_queue<pair<int,int>> pq;
+        // for(auto i:mp){
+        //     pq.push({i.second, i.first});
+        // }
+
+        // vector<int> v;
+        // for(int i=0; i<k; i++){
+        //     v.push_back(pq.top().second);
+        //     pq.pop();
+        // }
+
+        //return v;
     }
 };
