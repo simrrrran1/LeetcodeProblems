@@ -1,35 +1,36 @@
 class Solution {
 public:
-    bool helper(vector<vector<int>>&graph,vector<int>&v,int start,int end){
-        
-        if(v[start]==1){
-            return true;
+    bool dfs(int i, vector<vector<int>>& adj, vector<bool>& vis, unordered_set<int>& s){
+        s.insert(i);
+        vis[i] = true;
+
+        for(auto& it: adj[i]){
+            if(!vis[it]){
+                if(!dfs(it, adj, vis, s))
+                    return false;
+            } else if(s.count(it)) return false;
         }
-        if(!v[start]){
-            v[start]=1;
-            for(auto &i:graph[start]){
-                if(helper(graph,v,i,end)){
-                    return true;
-                }
-            }
-        }
-        v[start]=2;
-        return false;
+        s.erase(i);
+        return true;
     }
     bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
-        vector<vector<int>> graph(numCourses);
-        for(int i=0;i<prerequisites.size();i++){
-            graph[prerequisites[i][0]].push_back(prerequisites[i][1]);
-        }
-        vector<int> v(numCourses,0);
-        int cycleFlag=0;
-        for(int i=0;i<numCourses;i++){
-            if(!v[i]){
-                if(helper(graph,v,i,-1))
-                cycleFlag=1;
-            }
+        vector<vector<int>> adj(numCourses);
 
+        for(int i=0; i<prerequisites.size(); i++){
+            adj[prerequisites[i][1]].push_back(prerequisites[i][0]);
         }
-        return cycleFlag==0?true:false;
+
+        vector<bool> vis(numCourses, false);
+
+        for(int i=0; i<numCourses; i++){
+            if(!vis[i]){
+                unordered_set<int> s;
+                if(!dfs(i, adj, vis, s))
+                    return false;
+            }
+        }
+
+        return true;
+        
     }
 };
