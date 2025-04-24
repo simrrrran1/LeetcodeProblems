@@ -18,7 +18,10 @@ public:
         ListNode* left = dummy;
         ListNode* right = head;
 
-        for(int i=0; i<n; i++) right = right->next;
+        while(n > 0 && right){
+            right = right->next;
+            n--;
+        } 
 
         while(right){
             left = left->next;
