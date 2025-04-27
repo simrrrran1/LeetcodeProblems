@@ -8,14 +8,14 @@ public:
                 
                 string temp = "";
                 while(!s1.empty() && s1.top() != '['){
-                    temp = s1.top() + temp;
+                    temp = s1.top() + temp;//bcoz we get reversed string when we pop out of stack
                     s1.pop();
                 }
                 s1.pop();
                 
                 string num = "";
                 while(!s1.empty() && isdigit(s1.top())){
-                    num = s1.top() + num;
+                    num = s1.top() + num;//bcoz we get reversed string when we pop out of stack
                     s1.pop();
                 }
                 int k = stoi(num);
