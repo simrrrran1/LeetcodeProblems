@@ -8,7 +8,7 @@ public:
         int right = 0;
         while(right < nums.size()){
             pro *= nums[right];
-            while(pro >= k){
+            while(left<=right && pro >= k){
                 pro /= nums[left];
                 left++;
             }
@@ -17,4 +17,16 @@ public:
         }
         return ans;
     }
+
+    // nums = [10,5,2,6]
+    // k = 100
+    // [10], [5], [2], [6], [10, 5], [5,2], [2,6], [5, 2, 6]
+    // left = 0, right = 0
+    // pro = 1
+    // pro
+    // 10, 50, 100
+    // 10, 60, 
+    // right = 2
+    // left = 1
+    // totalCount = 2
 };
