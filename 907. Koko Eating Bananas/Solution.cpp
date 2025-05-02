@@ -4,22 +4,27 @@ public:
         int n = piles.size();
         sort(piles.begin(), piles.end());
         long left = 1, right = piles[n-1];
+        int res = piles[n-1];
 
         while(left <= right){
-            long mid = left + (right - left)/2;
+            long k = left + (right - left)/2;
 
-            long x = 0;
+            long hours = 0;
             for(int i: piles){
-                x += (i/mid);
-                if(i%mid != 0) x++;
+                hours += (i/k);
+                if(i%k != 0) hours++;
             }
-            if(x <= h){
-                right = mid - 1;
+
+            if(hours <= h){
+                if(res >= k){
+                    res = k;
+                }
+                right = k - 1;
             }else{
-                left = mid + 1;
+                left = k + 1;
             }
         }
-        return left;
+        return res;
     }
 };
 
