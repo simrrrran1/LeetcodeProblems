@@ -10,15 +10,15 @@
 class Solution {
 public:
     TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
-        if(!root || (root == p || root == q) )return root;
-        
-        TreeNode* leftRoot =  lowestCommonAncestor(root->left, p, q);
-        TreeNode* rightRoot =  lowestCommonAncestor(root->right, p, q);
+        if(!root || (p->val == root->val) || (q->val == root->val)) return root;
 
-        if(leftRoot && rightRoot) return root; //both p,q are in diff trees
-        if(leftRoot)return leftRoot; // p, q belong to same tree
-        else return rightRoot;
-        return NULL; // p, q are not there in both left and right trees
+        TreeNode* l = lowestCommonAncestor(root->left, p, q);
+        TreeNode* r = lowestCommonAncestor(root->right, p, q);
+
+        if(l && r) return root;
+        else if(l) return l;
+        else if(r) return r;
+        return NULL;
 
     }
 };
