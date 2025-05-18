@@ -6,9 +6,10 @@ public:
     if(cache.find(n) != cache.end()) return cache[n];
 
     int skip = helper(n + k, g, k);
-    int include = helper(n + 2 * k, g, k);
-    int ways = skip + include * ((1 << g[n]) - 1);  // each group element can be taken or not (excluding empty set)
-    return cache[n] = ways;
+    int count = g[n];
+    int include = (pow(2, count) - 1) * helper(n + 2 * k, g, k);
+    cache[n] = skip + include;
+    return cache[n];
 }
 
     int beautifulSubsets(vector<int>& nums, int k) {
