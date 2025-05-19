@@ -1,56 +1,53 @@
+#include <unordered_map>
+#include <unordered_set>
+#include <vector>
+#include <queue>
+using namespace std;
+
+/**
+ * Definition for a binary tree node.
+ */
+
+
 class Solution {
 public:
-    vector<int> distanceK(TreeNode* root, TreeNode* target, int k) {
-        unordered_map<TreeNode*, TreeNode*> parent;
+    void buildGraph(TreeNode* root, unordered_map<TreeNode*, vector<TreeNode*>>& mp) {
         queue<TreeNode*> q;
         q.push(root);
+
         while (!q.empty()) {
-            TreeNode* node = q.front();
-            q.pop();
+            TreeNode* node = q.front(); q.pop();
             if (node->left) {
-                parent[node->left] = node;
+                mp[node].push_back(node->left);
+                mp[node->left].push_back(node);
                 q.push(node->left);
             }
             if (node->right) {
-                parent[node->right] = node;
+                mp[node].push_back(node->right);
+                mp[node->right].push_back(node);
                 q.push(node->right);
             }
         }
+    }
 
-        vector<int> ans;
-        unordered_set<TreeNode*> vis;
-        q.push(target);
-        vis.insert(target);
-        int curr = 0;
-
-        while (!q.empty()) {
-            if (curr == k) {
-                while (!q.empty()) {
-                    ans.push_back(q.front()->val);
-                    q.pop();
-                }
-                return ans;
-            }
-            int size = q.size();
-            for (int i = 0; i < size; i++) {
-                TreeNode* node = q.front();
-                q.pop();
-                if (node->left && vis.find(node->left) == vis.end()) {
-                    q.push(node->left);
-                    vis.insert(node->left);
-                }
-                if (node->right && vis.find(node->right) == vis.end()) {
-                    q.push(node->right);
-                    vis.insert(node->right);
-                }
-                if (parent.find(node) != parent.end() && vis.find(parent[node]) == vis.end()) {
-                    q.push(parent[node]);
-                    vis.insert(parent[node]);
-                }
-            }
-            curr++;
+    void dfs(TreeNode* node, int k, unordered_set<TreeNode*>& visited, unordered_map<TreeNode*, vector<TreeNode*>>& mp, vector<int>& res) {
+        if (!node || visited.count(node)) return;
+        visited.insert(node);
+        if (k == 0) {
+            res.push_back(node->val);
+            return;
         }
+        for (auto neighbor : mp[node]) {
+            dfs(neighbor, k - 1, visited, mp, res);
+        }
+    }
 
-        return ans;
+    vector<int> distanceK(TreeNode* root, TreeNode* target, int k) {
+        unordered_map<TreeNode*, vector<TreeNode*>> mp;
+        buildGraph(root, mp);
+        unordered_set<TreeNode*> visited;
+        vector<int> res;
+        dfs(target, k, visited, mp, res);
+        return res;
     }
 };
