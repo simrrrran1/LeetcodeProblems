@@ -1,28 +1,29 @@
 class Solution {
 public:
-    vector<int> goodDaysToRobBank(vector<int>& s, int time) {
-        int size=s.size(),cnt=1;
-        vector<int>pre(size,0),suf(size,0);
-        pre[0]=1;
-        for(int i=1;i<size;i++){
-            if(s[i]<=s[i-1])
-                cnt++;
-            else
-                cnt=1;
-             pre[i]=cnt;
+    vector<int> goodDaysToRobBank(vector<int>& security, int time) {
+        int n = security.size();
+        vector<int> descOrder(n, 0);
+        vector<int> ascOrder(n, 0);
+
+        for(int i=1; i<n; i++){
+            if(security[i-1] >= security[i]) descOrder[i] = 1 + descOrder[i-1];
+            else descOrder[i] = 0;
         }
-        suf[size-1]=1;cnt=1;
-        for(int i=size-2;i>=0;i--){
-            if(s[i]<=s[i+1])
-                cnt++;
-            else
-                cnt=1;
-            suf[i]=cnt; 
+
+        for(int i=n-2; i>=0; i--){
+            if(security[i+1] >= security[i]) ascOrder[i] = 1 + ascOrder[i+1];
+            else ascOrder[i] = 0;
         }
-        vector<int>ans;
-        for(int i=0;i<size;i++)
-            if(pre[i]-1>=time && suf[i]-1>=time)
-                ans.push_back(i);
+
+        vector<int> ans;
+
+        for(int i=time; i<n-time; i++){
+            if(descOrder[i] >= time && ascOrder[i] >= time) ans.push_back(i); 
+        }
+
+
         return ans;
+
+
     }
 };
