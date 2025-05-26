@@ -2,13 +2,13 @@ class Solution {
 public:
     vector<vector<int>> merge(vector<vector<int>>& intervals) {
         vector<vector<int>> ans;
-        pair<int, int> p;
+        int n = intervals.size();
         sort(intervals.begin(), intervals.end());
-        p.first = intervals[0][0];
-        p.second = intervals[0][1];
 
-        for(int i=1; i<intervals.size(); i++){
-            if(intervals[i][0] > p.second){
+        pair<int,int> p = {intervals[0][0], intervals[0][1]};
+
+        for(int i=1; i<n; i++){
+            if(p.second < intervals[i][0]){
                 ans.push_back({p.first, p.second});
                 p.first = intervals[i][0];
                 p.second = intervals[i][1];
