@@ -1,26 +1,39 @@
 class Solution {
 public:
     long long numberOfWays(string s) {
-        long long count0 = 0, count1 = 0;
-        long long count01 = 0, count10 = 0;
-        long long result = 0;
+        int n = s.size();
+        vector<long long> prefix_0(n, 0);
+        vector<long long> prefix_1(n, 0);
+        vector<long long> suffix_0(n, 0);
+        vector<long long> suffix_1(n, 0);
 
-        for (char c : s) {
-            if (c == '0') {
-                count0++;
-                result += count10;   // "101" pattern
-            } else {
-                count1++;
-                result += count01;   // "010" pattern
+        for(int i=0; i<n; i++){
+            if(i > 0){
+                prefix_0[i] = prefix_0[i-1];
+                prefix_1[i] = prefix_1[i-1];
             }
+            if(s[i] == '0') prefix_0[i]++;
+            if(s[i] == '1') prefix_1[i]++;
+        }
 
-            if (c == '0') {
-                count01 += count1;   // "01" pair
-            } else {
-                count10 += count0;   // "10" pair
+        for(int i=n-1; i>=0; i--){
+            if(i < n-1){
+                suffix_0[i] = suffix_0[i+1];
+                suffix_1[i] = suffix_1[i+1];
+            }
+            if(s[i] == '0') suffix_0[i]++;
+            if(s[i] == '1') suffix_1[i]++;
+        }
+
+        long long ans = 0;
+        for(int i=1; i<n-1; i++){
+            if(s[i] == '0'){
+                ans += prefix_1[i-1] * suffix_1[i+1];
+            }else{
+                ans += prefix_0[i-1] * suffix_0[i+1];
             }
         }
 
-        return result;
+        return ans;
     }
 };
