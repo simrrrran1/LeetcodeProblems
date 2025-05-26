@@ -1,26 +1,26 @@
 class Solution {
 public:
     long long numberOfWays(string s) {
-        long long a=0,b=0,ans=0;        // a and b are the number of occurances of '1' and '0' after the current building respectively.
-        for(int i=0;i<s.length();i++){
-            if(s[i]=='1')
-                a++;
-            else
-                b++;
-        }
-        long long c=0,d=0;              // c and d are the number of occurances of '1' and '0' before the current building respectively.
-        for(int i=0;i<s.length();i++){
-            if(s[i]=='1'){               // Counting the sequences of "010"
-                ans+=(d*b);
-                a--;
-                c++;
+        long long count0 = 0, count1 = 0;
+        long long count01 = 0, count10 = 0;
+        long long result = 0;
+
+        for (char c : s) {
+            if (c == '0') {
+                count0++;
+                result += count10;   // "101" pattern
+            } else {
+                count1++;
+                result += count01;   // "010" pattern
             }
-            else{                        // Counting the sequences of "101"
-                ans+=(a*c);
-                b--;
-                d++;
+
+            if (c == '0') {
+                count01 += count1;   // "01" pair
+            } else {
+                count10 += count0;   // "10" pair
             }
         }
-        return ans;
+
+        return result;
     }
 };
