@@ -12,8 +12,8 @@
 class Solution {
 public:
     // 0 : not covered
-    // 1 : has camera
-    // 2 : covered by camera
+    // 1 : covered by camera
+    // 2 : has camera
     int camera = 0;
     int dfs(TreeNode* root){
         if(!root) return 1;
