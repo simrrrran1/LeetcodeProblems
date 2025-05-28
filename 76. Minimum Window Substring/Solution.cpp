@@ -1,25 +1,42 @@
 class Solution {
 public:
     string minWindow(string s, string t) {
-        unordered_map<char,int>mp;
-        for(char c:t){
-            mp[c]++;
+        if (t == "" || s == "") return "";
+
+        unordered_map<char, int> tMap, sMap;
+
+        for (char c : t) {
+            tMap[c]++;
         }
-        int left=0,right=0,cnt=0,startIdx=-1,minLen=INT_MAX;
-        while(right<s.size()){
-            if(mp[s[right]]>0)cnt++;
-            mp[s[right]]--;
-            while(cnt==t.size()){
-                if(right-left+1<minLen){
-                    minLen=right-left+1;
-                    startIdx=left;
+
+        int have = 0, need = tMap.size();
+        int left = 0, resLen = INT_MAX;
+        int resStart = 0;
+
+        for (int right = 0; right < s.size(); right++) {
+            char c = s[right];
+            sMap[c]++;
+
+            if (tMap.count(c) && sMap[c] == tMap[c]) {
+                have++;
+            }
+
+            while (have == need) {
+                // Update result
+                if (right - left + 1 < resLen) {
+                    resLen = right - left + 1;
+                    resStart = left;
                 }
-                mp[s[left]]++;
-                if(mp[s[left]]>0)cnt--;
+
+                // Contract from the left
+                sMap[s[left]]--;
+                if (tMap.count(s[left]) && sMap[s[left]] < tMap[s[left]]) {
+                    have--;
+                }
                 left++;
             }
-            right++;
         }
-        return startIdx==-1?"":s.substr(startIdx,minLen);
+
+        return resLen == INT_MAX ? "" : s.substr(resStart, resLen);
     }
 };
