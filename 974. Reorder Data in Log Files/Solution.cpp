@@ -1,26 +1,45 @@
 class Solution {
 public:
     vector<string> reorderLogFiles(vector<string>& logs) {
-        // We can break this problem into two tasks: 1) Parition 2) Sort letter-logs
+        vector<string> letter_logs;
+        vector<string> digit_logs;
+        vector<string> ans;
 
-        // Partition: letter-logs at the front, digit-logs at the back.
-        // We're using stable_partition instead of partition to retain the original order.
-        // stable_partition returns an iterator to the first element of the second group.
-        
-        auto it = stable_partition(logs.begin(), logs.end(), [](const string& str) {
-            return isalpha(str[str.find(' ') + 1]);
+        for(int i=0; i<logs.size(); i++){
+            int idx = logs[i].find(" ") + 1;
+            if(logs[i].at(idx) >= '0' && logs[i].at(idx) <= '9'){
+                digit_logs.push_back(logs[i]);
+            }else{
+                letter_logs.push_back(logs[i]);
+            }
+        }
+
+        sort(letter_logs.begin(), letter_logs.end(), [](const string&a , const string&b){
+            int space1 = a.find(" ") + 1;
+            int space2 = b.find(" ") + 1;
+
+            string contentA = a.substr(space1);
+            string contentB = b.substr(space2);
+
+            if(contentA == contentB){
+                return a < b;
+            }
+            return contentA < contentB;
         });
 
-        // Sort letter-logs: We're only iterating on letter-logs in this case.
-        // We're creating a substring for every element we compare that doesn't include the identifier
-        // If the logs are the same except the identifier, we compare the strings, otherwise, the substrings
-        
-        sort(logs.begin(), it, [](const string& str1, const string& str2) {
-            auto substr1 = string(str1.begin() + str1.find(' '), str1.end());
-            auto substr2 = string(str2.begin() + str2.find(' '), str2.end());
-            return (substr1 == substr2) ? str1 < str2 : substr1 < substr2;
-        });
-        
-        return logs;
+        for(auto i: letter_logs){
+            ans.push_back(i);
+        }
+        for(int i=0; i<digit_logs.size(); i++){
+            ans.push_back(digit_logs[i]);
+        }
+        return ans;
+
+
+
+
+
+
+        return ans;
     }
 };
