@@ -1,21 +1,33 @@
 class Solution {
 public:
-    vector<int> platesBetweenCandles(string s, vector<vector<int>>& q) {
-      int n = s.size(),cnt = 0;
-      vector<int> prec(n,0),cp,ans;
-      for(int i = 0;i<n;i++)
-      {
-         if(s[i]=='*') cnt++;
-         if(s[i]=='|') cp.push_back(i);
-         prec[i] = cnt;
-      }
-      for(int i = 0;i<q.size();i++)
-      {
-          int l = lower_bound(cp.begin(),cp.end(),q[i][0])-cp.begin();
-          int r = upper_bound(cp.begin(),cp.end(),q[i][1])-cp.begin();
-          if(l<0 || l>=cp.size() || r<=0 || r>cp.size() || prec[cp[r-1]]-prec[cp[l]]<0) ans.push_back(0);
-          else ans.push_back(prec[cp[r-1]]-prec[cp[l]]);
-      }
-      return ans;  
+    vector<int> platesBetweenCandles(string s, vector<vector<int>>& queries) {
+        int n = s.size();
+        vector<int> prefixCandles(n, 0);
+        vector<int> suffixCandles(n, 0);
+        vector<int> plate(n, 0);
+        vector<int> ans(queries.size(), 0);
+        
+        prefixCandles[0] = s[0] == '|' ? 0 : -1;
+        plate[0] = s[0] == '*' ? 1 : 0;
+
+        for(int i=1; i<n; i++){
+            prefixCandles[i] = s[i] == '|' ? i : prefixCandles[i-1];
+            plate[i] = (s[i] == '*' ? 1 : 0 )+ plate[i-1];
+        }
+
+        suffixCandles[n-1] = s[n-1] == '|' ? n-1 : n;
+        
+        for(int i=n-2; i>=0; i--){
+            suffixCandles[i] = s[i] == '|' ? i : suffixCandles[i+1];
+        }
+
+        for(int i=0; i<queries.size(); i++){
+            int start = suffixCandles[queries[i][0]];
+            int end = prefixCandles[queries[i][1]];
+            ans[i] = start >= end ? 0 : plate[end] - plate[start];
+        }
+
+        return ans;
+
     }
 };
