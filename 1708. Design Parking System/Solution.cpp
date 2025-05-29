@@ -3,20 +3,24 @@ public:
     int big, medium, small;
     ParkingSystem(int big, int medium, int small) {
         this->big = big;
-        this->medium = medium;
         this->small = small;
+        this->medium = medium;
     }
     
     bool addCar(int carType) {
-        if(carType == 1){
-            if(big == 0) return false;
-            big--;
-        }else if(carType == 2){
-            if(medium == 0) return false;
-            medium--;
-        }else{
-            if(small == 0) return false;
-            small--;
+        switch(carType){
+            case 1:
+                if(big == 0) return false;
+                big--;
+                break;
+            case 2:
+                if(medium == 0) return false;
+                medium--;
+                break;
+            case 3:
+                if(small == 0) return false;
+                small--;
+                break;
         }
         return true;
     }
