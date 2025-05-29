@@ -20,17 +20,15 @@ public:
             temp = temp->next;
         }
         temp->next = head;
-        ListNode* tail = head;
         k %= len;
+        k = len - k;
 
-        for(int i=0; i<len-k-1; i++){
-            tail = tail->next;
+        for(int i=0; i<k; i++){
+            temp = temp->next;
         }
-        ListNode* newHead = tail->next;
-        tail->next = NULL;
-        return newHead;
-
-
+        head = temp->next;
+        temp->next = NULL;
+        return head;
 
     }
 };
