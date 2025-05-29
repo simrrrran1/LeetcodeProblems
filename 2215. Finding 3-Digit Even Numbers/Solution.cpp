@@ -9,6 +9,7 @@ public:
         vector<int> ans;
 
         for(int i=100; i<1000; i++){
+            if(i%2 == 1) continue;
             int first = i % 10;
             int second = (i / 10) % 10;
             int third = (i / 100) % 10;
@@ -18,7 +19,7 @@ public:
             mp1[second] += 1;
             mp1[third] += 1;
 
-            if(mp1[first] <= mp[first] && mp1[second] <= mp[second] && mp1[third] <= mp[third] && (i % 2 == 0)){
+            if(mp1[first] <= mp[first] && mp1[second] <= mp[second] && mp1[third] <= mp[third]){
                 ans.push_back(i);
             }
 
