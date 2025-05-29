@@ -11,24 +11,34 @@
 class Solution {
 public:
     ListNode* rotateRight(ListNode* head, int k) {
-        if(!head || !head->next || k == 0) return head;
+        // Edge case: if the list is empty, has one node, or k is 0, return as is
+        if (!head || !head->next || k == 0) return head;
 
+        // Step 1: Find the length of the list
         int len = 1;
         ListNode* temp = head;
-        while(temp->next){
+        while (temp->next) {
             len++;
             temp = temp->next;
         }
-        temp->next = head;
-        k %= len;
-        k = len - k;
 
-        for(int i=0; i<k; i++){
+        // Step 2: Connect the last node to the head to make it circular
+        temp->next = head;
+
+        // Step 3: Normalize k in case it's greater than list length
+        k %= len;
+
+        // Step 4: Find the node just before the new head after rotation
+        // To rotate right by k, new head is at (len - k)th position
+        k = len - k;
+        for (int i = 0; i < k; i++) {
             temp = temp->next;
         }
-        head = temp->next;
-        temp->next = NULL;
-        return head;
 
+        // Step 5: Break the circular link and set new head
+        head = temp->next;
+        temp->next = nullptr;
+
+        return head;
     }
 };
