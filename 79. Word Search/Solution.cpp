@@ -1,37 +1,28 @@
 class Solution {
 public:
-    vector<int> findMinHeightTrees(int n, vector<vector<int>>& edges) {
-        if(n==1)return {0};
-        vector<int>ans;
-        vector<list<int>> adj(n);
-        vector<int>degree(n,0);
-        for(auto i:edges){
-            int u=i[0],v=i[1];
-            adj[u].push_back(v);
-            adj[v].push_back(u);
-            degree[u]++;
-            degree[v]++;
-        }
-        queue<int>leaves;
-        for(int i=0;i<degree.size();i++){
-            if(degree[i]==1)leaves.push(i);
-        }
-        int remainder=n;
-        while(remainder>2){
-            int k=leaves.size();
-            remainder-=k;
-            for(int i=0;i<k;i++){
-                int leaf=leaves.front();
-                leaves.pop();
-                for(auto& j:adj[leaf]){
-                    if(--degree[j]==1)leaves.push(j);
-                }
+    bool dfs(vector<vector<char>>& board, int i, int j, vector<vector<bool>>& vis, string word, int idx, int row, int col){
+        if(idx == word.size()) return true;
+        if(i < 0 || j < 0 || i >= row || j >= col || word[idx] != board[i][j] || vis[i][j]) return false;
+
+        vis[i][j] = true;
+        bool left = dfs(board, i-1, j, vis, word, idx + 1, row, col);
+        bool right = dfs(board, i+1, j, vis, word, idx + 1, row, col);
+        bool up = dfs(board, i, j-1, vis, word, idx + 1, row, col);
+        bool down = dfs(board, i, j+1, vis, word, idx + 1, row, col);
+        vis[i][j] = false;
+        
+        return left || right || up || down;
+
+    }
+    bool exist(vector<vector<char>>& board, string word) {
+        int row = board.size();
+        int col = board[0].size();
+        vector<vector<bool>> vis(row, vector<bool>(col, false));
+        for(int i=0; i<row; i++){
+            for(int j=0; j<col; j++){
+                if(dfs(board, i, j, vis, word, 0, row, col)) return true;
             }
         }
-        while(!leaves.empty()){
-            ans.push_back(leaves.front());
-            leaves.pop();
-        }
-        return ans;
+        return false;
     }
 };
