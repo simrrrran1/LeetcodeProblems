@@ -1,46 +1,45 @@
 class Solution {
 public:
-    // DFS helper to search for the word starting from board[i][j]
-    bool dfs(vector<vector<char>>& board, int i, int j, vector<vector<bool>>& vis, string word, int idx, int row, int col) {
-        // If we have matched all characters in the word
+    // Helper function to perform DFS and backtracking
+    bool helper(vector<vector<char>>& board, int i, int j, string word, int idx, int n, int m) {
+        // If all characters are matched
         if (idx == word.size()) return true;
 
-        // Boundary checks and character match check
-        if (i < 0 || j < 0 || i >= row || j >= col || board[i][j] != word[idx] || vis[i][j]) 
-            return false;
+        // Boundary checks and mismatch check
+        if (i < 0 || j < 0 || i == n || j == m || board[i][j] != word[idx]) return false;
 
-        // Mark current cell as visited
-        vis[i][j] = true;
+        // Temporarily mark the current cell as visited
+        char temp = board[i][j];
+        board[i][j] = '.';
 
-        // Recursively search in all four directions
-        bool left  = dfs(board, i - 1, j, vis, word, idx + 1, row, col);
-        bool right = dfs(board, i + 1, j, vis, word, idx + 1, row, col);
-        bool up    = dfs(board, i, j - 1, vis, word, idx + 1, row, col);
-        bool down  = dfs(board, i, j + 1, vis, word, idx + 1, row, col);
-
-        // Backtrack: unmark the visited cell
-        vis[i][j] = false;
+        // Explore all four directions
+        int left  = helper(board, i - 1, j, word, idx + 1, n, m);
+        int right = helper(board, i + 1, j, word, idx + 1, n, m);
+        int up    = helper(board, i, j - 1, word, idx + 1, n, m);
+        int down  = helper(board, i, j + 1, word, idx + 1, n, m);
 
         // If any direction returns true, word exists
-        return left || right || up || down;
+        if (left || right || up || down) return true;
+
+        // Backtrack: restore the original character
+        board[i][j] = temp;
+
+        return false;
     }
 
+    // Main function to search the word in the board
     bool exist(vector<vector<char>>& board, string word) {
-        int row = board.size();
-        int col = board[0].size();
+        int n = board.size();
+        int m = board[0].size();
 
-        // Visited matrix to avoid revisiting same cell in one DFS path
-        vector<vector<bool>> vis(row, vector<bool>(col, false));
-
-        // Try to find the word starting from every cell in the board
-        for (int i = 0; i < row; i++) {
-            for (int j = 0; j < col; j++) {
-                if (dfs(board, i, j, vis, word, 0, row, col)) 
-                    return true;
+        // Try starting DFS from every cell
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (helper(board, i, j, word, 0, n, m)) return true;
             }
         }
 
-        // Word not found in any path
+        // If no valid path is found
         return false;
     }
 };
