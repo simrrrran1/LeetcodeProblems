@@ -4,23 +4,24 @@ public:
         int n = intervals.size();
         vector<int> start(n, 0);
         vector<int> end(n, 0);
-        for(int i=0; i<n; i++){
+
+        for(int i=0; i<intervals.size(); i++){
             start[i] = intervals[i][0];
             end[i] = intervals[i][1];
         }
+        int ans = 0;
+        int curr = 0;
+        int i=0, j=0;
         sort(start.begin(), start.end());
         sort(end.begin(), end.end());
-        int ans = 0;
-        int sIdx = 0, eIdx = 0;
-        int curr = 0;
-        while(sIdx < n && eIdx < n){
-            if(start[sIdx] < end[eIdx]){
+
+        while(i < n && j < n){
+            if(start[i] < end[j]){
+                i++;
                 curr++;
-                sIdx++;
-            }
-            else {
+            }else{
+                j++;
                 curr--;
-                eIdx++;
             }
             ans = max(ans, curr);
         }
