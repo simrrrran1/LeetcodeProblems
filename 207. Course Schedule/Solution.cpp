@@ -1,16 +1,18 @@
 class Solution {
 public:
-    bool dfs(int i, vector<vector<int>>& adj, vector<bool>& vis, unordered_set<int>& s){
-        s.insert(i);
-        vis[i] = true;
+    bool dfs(vector<vector<int>>& adj, int start, vector<bool>& vis, unordered_set<int>& s){
+        vis[start] = true;
+        s.insert(start);
 
-        for(auto& it: adj[i]){
-            if(!vis[it]){
-                if(!dfs(it, adj, vis, s))
+        for(auto& i: adj[start]){
+            if(!vis[i]){
+                if(!dfs(adj, i, vis, s))
                     return false;
-            } else if(s.count(it)) return false;
+            }else if(s.count(i)){
+                return false;
+            }
         }
-        s.erase(i);
+        s.erase(start);
         return true;
     }
     bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
@@ -25,12 +27,10 @@ public:
         for(int i=0; i<numCourses; i++){
             if(!vis[i]){
                 unordered_set<int> s;
-                if(!dfs(i, adj, vis, s))
+                if(!dfs(adj, i, vis, s))
                     return false;
             }
         }
-
         return true;
-        
     }
 };
