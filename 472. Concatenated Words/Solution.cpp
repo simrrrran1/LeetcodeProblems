@@ -1,27 +1,36 @@
 class Solution {
 public:
-    vector<string> findAllConcatenatedWordsInADict(vector<string>& words) {
-        unordered_set<string> words_set;
-        for (string word : words) words_set.insert(word);
-        vector<string> res;
-    
-        for (string word : words) {
-            int n = word.size();
-            vector<int> dp(n + 1, 0);
-            dp[0] = 1;
-            for (int i = 0; i < n; i++) {
-                if (!dp[i]) continue;
-                for (int j = i + 1; j <= n; j++) {
-                    if (j - i < n && words_set.count(word.substr(i, j - i))) {
-                        dp[j] = 1;
-                    }
-                }
-                if (dp[n]) {
-                    res.push_back(word);
-                    break;
-                }
+    bool dfs(string s1, unordered_map<string, bool>& dp, unordered_set<string>& s){
+        if(dp.count(s1)) return dp[s1];
+        
+        for(int i=1; i<s1.size(); i++){
+            string prefix = s1.substr(0, i);
+            string suffix = s1.substr(i);
+
+            if(s.count(prefix) && (s.count(suffix) || dfs(suffix, dp, s))){
+                dp[s1] = true;
+                return dp[s1];
             }
         }
-        return res;
+        dp[s1] = false;
+        return dp[s1];
+    }
+    vector<string> findAllConcatenatedWordsInADict(vector<string>& words) {
+       unordered_set<string> s;
+       for(string i: words){
+            s.insert(i);
+       }
+
+       vector<string> ans;
+
+       for(int i=0; i<words.size(); i++){
+            unordered_map<string, bool> dp;
+            s.erase(words[i]);
+            if(dfs(words[i], dp, s)){
+                ans.push_back(words[i]);
+            }
+            s.insert(words[i]);
+       }
+       return ans;
     }
 };
